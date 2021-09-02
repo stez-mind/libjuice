@@ -1032,7 +1032,7 @@ int agent_bookkeeping(juice_agent_t *agent, timestamp_t *next_timestamp) {
 	} else if (pending_count == 0) {
 		// Failed
 		if (!agent->fail_timestamp)
-			agent->fail_timestamp = now + (agent->remote.finished ? 0 : ICE_FAIL_TIMEOUT);
+			agent->fail_timestamp = now + (agent->remote.finished ? 0 : agent->config.failure_timeout_ms);
 
 		if (agent->fail_timestamp && now >= agent->fail_timestamp)
 			agent_change_state(agent, JUICE_STATE_FAILED);
@@ -2283,7 +2283,7 @@ void agent_arm_transmission(juice_agent_t *agent, agent_stun_entry_t *entry, tim
 		bool limit = agent->selected_pair &&
 		             (agent->selected_pair->nominated || (agent->selected_pair != entry->pair &&
 		                                                  agent->mode == AGENT_MODE_CONTROLLING));
-		entry->retransmissions = limit ? 1 : MAX_STUN_RETRANSMISSION_COUNT;
+		entry->retransmissions = limit ? 1 : agent->config.max_stun_retransmission_count;
 		entry->retransmission_timeout = MIN_STUN_RETRANSMISSION_TIMEOUT;
 	}
 

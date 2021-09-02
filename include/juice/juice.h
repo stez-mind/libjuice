@@ -91,6 +91,9 @@ typedef struct juice_config {
 	juice_cb_gathering_done_t cb_gathering_done;
 	juice_cb_recv_t cb_recv;
 
+    int failure_timeout_ms;
+    int max_stun_retransmission_count;
+
 	void *user_ptr;
 
 } juice_config_t;
